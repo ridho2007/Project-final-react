@@ -15,6 +15,7 @@ function NavigationBar() {
   const [deskripsi, setDeskripsi] = useState("");
   const [harga, setHarga] = useState("");
   const [img, setImg] = useState("");
+  const [terjual, setTerjual] = useState("");
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
@@ -27,15 +28,22 @@ function NavigationBar() {
       deskripsi: deskripsi,
       harga: harga,
       img: img,
+      terjual: terjual,
     };
     await axios
 
       .post("http://localhost:8000/Makanans", data)
 
       .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil Di Tambahkan",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 1000);
       })
       .catch((eror) => {
         Swal.fire({
@@ -104,6 +112,7 @@ function NavigationBar() {
                 </a>
               )}{" "}
             </button>
+           
             <a href="/cart">
             <FaOpencart
               style={{ marginLeft: 20, marginRight: 40, fontSize: 40 }}
@@ -145,7 +154,7 @@ function NavigationBar() {
             <Form.Group className="mb-3" controlId="formBasicDate">
               <Form.Label>Harga</Form.Label>
               <Form.Control
-                type="number"
+                type="Number"
                 placeholder=""
                 onChange={(e) => setHarga(e.target.value)}
                 required
@@ -157,6 +166,15 @@ function NavigationBar() {
                 type="url"
                 placeholder="url"
                 onChange={(e) => setImg(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicText">
+              <Form.Label>Terjual</Form.Label>
+              <Form.Control
+                type="int"
+                placeholder="Terjual"
+                onChange={(e) => setTerjual(e.target.value)}
                 required
               />
             </Form.Group>

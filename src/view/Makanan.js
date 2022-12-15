@@ -10,6 +10,7 @@ function Makanan() {
   const [nama, setNama] = useState("");
   const [harga, setHarga] = useState("");
   const [img, setImg] = useState("");
+  const [terjual, setTerjual] = useState("");
   const getAll = () => {
     axios
       .get("http://localhost:8000/Makanans")
@@ -34,10 +35,14 @@ function Makanan() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
+      
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete("http://localhost:8000/Makanans/" + id);
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     });
 
@@ -46,14 +51,12 @@ function Makanan() {
   useEffect(() => {
     getAll();
   }, []);
-  const Cart = {
-    nama: nama,
-   harga: harga,
-    img: img,
-  };
+
   const beli = async (makanan) => {
     await axios.post("http://localhost:8000/cart", makanan);
     console.log(makanan);
+    Swal.fire("Berhasil!", "Di masukan Ke keranjang", "success");
+    
   };
 
   return (
@@ -87,7 +90,7 @@ function Makanan() {
                             {Makanan.harga}
                           </p>
                           <p class="mt-2 text-sm leading-relaxed text-gray-500 line-clamp-3">
-                            101_terjual
+                            {Makanan.terjual}_Terjual
                           </p>
                         </div>
                       </div>
@@ -98,7 +101,7 @@ function Makanan() {
                         >
                           Pesan
                         </button>
-
+                        {localStorage.getItem("role") === "admin" && (
                         <Button
                           variant="danger"
                           className="ml-2 text-white rounded-lg p-2 mb-3"
@@ -106,13 +109,17 @@ function Makanan() {
                         >
                           Hapus
                         </Button>
+                          )}
                         {/* tombol ini akan mengarah ke page lain */}
+                        {localStorage.getItem("role") === "admin" && (
                         <a href={"/edit/" + Makanan.id}>
                           <Button variant="warning" className="mx-1">
                             ubah
                           </Button>
                         </a>
+                        )}
                       </div>
+                      
                     </article>
                   );
                 })}
